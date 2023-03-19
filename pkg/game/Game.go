@@ -1,12 +1,12 @@
 package game
 
 import (
+	"fmt"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
 	"image/color"
 	"math"
-	"strings"
 )
 
 const (
@@ -44,7 +44,7 @@ var worldMap = [mapWidth][mapHeight]int{
 var posX, posY float64 = 4, 4
 var dirX, dirY float64 = 0, -1
 var planeX, planeY float64 = 0, 0.66
-var time float64 = 0
+var gtime float64 = 0
 var oldTime float64 = 0
 
 type Game struct {
@@ -52,8 +52,61 @@ type Game struct {
 	keys   []ebiten.Key
 }
 
+func (g *Game) handleMovement() {
+
+	frametime := ebiten.ActualTPS() / 1000.0
+	moveSpeed := frametime * 0.5
+	rotSpeed := frametime * 3.0
+	if ebiten.IsKeyPressed(ebiten.KeyArrowUp) {
+		posX += dirX * moveSpeed
+		posY += dirY * moveSpeed
+
+		newPosX := posX + dirX*moveSpeed
+		newPosY := posY + dirY*moveSpeed
+		fmt.Println(newPosX, " | ", newPosY)
+		if newPosX >= 1 {
+			posX = newPosX
+		}
+		if newPosY >= 1 {
+			posY = newPosY
+		}
+	}
+	if ebiten.IsKeyPressed(ebiten.KeyArrowDown) {
+		newPosX := posX - dirX*moveSpeed
+		newPosY := posY - dirY*moveSpeed
+		fmt.Println(newPosX, " | ", newPosY)
+		if newPosX >= 1 {
+			posX = newPosX
+		}
+		if newPosY >= 1 {
+			posY = newPosY
+		}
+
+		//posX -= dirX * moveSpeed
+		//posY -= dirY * moveSpeed
+	}
+	if ebiten.IsKeyPressed(ebiten.KeyArrowRight) {
+		var oldDirX float64 = dirX
+		dirX = dirX*math.Cos(-rotSpeed) - dirY*math.Sin(-rotSpeed)
+		dirY = oldDirX*math.Sin(-rotSpeed) + dirY*math.Cos(-rotSpeed)
+		oldPlaneX := planeX
+		planeX = planeX*math.Cos(-rotSpeed) - planeY*math.Sin(-rotSpeed)
+		planeY = oldPlaneX*math.Sin(-rotSpeed) + planeY*math.Cos(-rotSpeed)
+	}
+	if ebiten.IsKeyPressed(ebiten.KeyArrowLeft) {
+		var oldDirX float64 = dirX
+		dirX = dirX*math.Cos(rotSpeed) - dirY*math.Sin(rotSpeed)
+		dirY = oldDirX*math.Sin(rotSpeed) + dirY*math.Cos(rotSpeed)
+		oldPlaneX := planeX
+		planeX = planeX*math.Cos(rotSpeed) - planeY*math.Sin(rotSpeed)
+		planeY = oldPlaneX*math.Sin(rotSpeed) + planeY*math.Cos(rotSpeed)
+	}
+}
+
 func (g *Game) Update() error {
 	g.keys = inpututil.AppendPressedKeys(g.keys[:0])
+	g.handleMovement()
+
 	return nil
 }
 
@@ -161,9 +214,8 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		ebitenutil.DrawLine(screen, float64(x), float64(drawStart), float64(x), float64(drawEnd), renderedColor)
 	}
 
-	oldTime = time
-	time =
-
+	oldTime = gtime
+	gtime = ebiten.ActualTPS()
 	//keyStrs := []string{}
 	//for _, k := range g.keys {
 	//	keyStrs = append(keyStrs, k.String())
