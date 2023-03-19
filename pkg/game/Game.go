@@ -41,8 +41,8 @@ var worldMap = [mapWidth][mapHeight]int{
 	{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 }
 
-var posX, posY float64 = 4, 4
-var dirX, dirY float64 = 0, -1
+var posX, posY float64 = 12, 12
+var dirX, dirY float64 = -1, 0
 var planeX, planeY float64 = 0, 0.66
 var gtime float64 = 0
 var oldTime float64 = 0
@@ -74,7 +74,7 @@ func (g *Game) handleMovement() {
 	if ebiten.IsKeyPressed(ebiten.KeyArrowDown) {
 		newPosX := posX - dirX*moveSpeed
 		newPosY := posY - dirY*moveSpeed
-		fmt.Println(newPosX, " | ", newPosY)
+		//fmt.Println(newPosX, " | ", newPosY)
 		if newPosX >= 1 {
 			posX = newPosX
 		}
@@ -188,6 +188,8 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		}
 
 		var renderedColor color.RGBA
+
+		fmt.Println(mapX, " | ", mapY)
 
 		switch worldMap[mapX][mapY] {
 		case 1:
