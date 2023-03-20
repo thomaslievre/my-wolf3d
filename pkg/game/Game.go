@@ -56,7 +56,7 @@ func (g *Game) handleMovement() {
 
 	frametime := ebiten.ActualTPS() / 1000.0
 	moveSpeed := frametime * 0.5
-	rotSpeed := frametime * 3.0
+	rotSpeed := frametime * 2.0
 	if ebiten.IsKeyPressed(ebiten.KeyArrowUp) {
 		posX += dirX * moveSpeed
 		posY += dirY * moveSpeed
@@ -64,10 +64,10 @@ func (g *Game) handleMovement() {
 		newPosX := posX + dirX*moveSpeed
 		newPosY := posY + dirY*moveSpeed
 		fmt.Println(newPosX, " | ", newPosY)
-		if newPosX >= 1 {
+		if int(newPosX) > 1 {
 			posX = newPosX
 		}
-		if newPosY >= 1 {
+		if int(newPosY) > 1 {
 			posY = newPosY
 		}
 	}
@@ -75,10 +75,10 @@ func (g *Game) handleMovement() {
 		newPosX := posX - dirX*moveSpeed
 		newPosY := posY - dirY*moveSpeed
 		//fmt.Println(newPosX, " | ", newPosY)
-		if newPosX >= 1 {
+		if int(newPosX) > 1 {
 			posX = newPosX
 		}
-		if newPosY >= 1 {
+		if int(newPosY) > 1 {
 			posY = newPosY
 		}
 
@@ -111,9 +111,10 @@ func (g *Game) Update() error {
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-	for x := 0; x < g.Px; x++ {
+	w := g.Px
+	for x := 0; x < w; x++ {
 		//calculate ray position and direction
-		cameraX := float64(2*x/g.Px - 1) //x-coordinate in camera space
+		cameraX := float64(2*x/w - 1) //x-coordinate in camera space
 		rayDirX := dirX + planeX*cameraX
 		rayDirY := dirY + planeY*cameraX
 
@@ -209,9 +210,9 @@ func (g *Game) Draw(screen *ebiten.Image) {
 			break
 		}
 
-		if side == 1 {
-			renderedColor.A = renderedColor.A / 2
-		}
+		//if side == 1 {
+		//	renderedColor.A = renderedColor.A / 2
+		//}
 
 		ebitenutil.DrawLine(screen, float64(x), float64(drawStart), float64(x), float64(drawEnd), renderedColor)
 	}
