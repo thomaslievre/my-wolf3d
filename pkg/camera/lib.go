@@ -4,6 +4,30 @@ type Camera struct {
 	posX, posY     float64
 	dirX, dirY     float64
 	planeX, planeY float64
+
+	fov     float64
+	halfFov float64
+	angle   float64
+}
+
+func NewCamera() *Camera {
+	return &Camera{
+		fov:     60,
+		halfFov: 30,
+		angle:   90,
+	}
+}
+
+func (c *Camera) Fov() float64 {
+	return c.fov
+}
+
+func (c *Camera) HalfFov() float64 {
+	return c.halfFov
+}
+
+func (c *Camera) Angle() float64 {
+	return c.angle
 }
 
 func (c *Camera) PosX() float64 {
@@ -52,10 +76,6 @@ func (c *Camera) PlaneY() float64 {
 
 func (c *Camera) SetPlaneY(planeY float64) {
 	c.planeY = planeY
-}
-
-func NewCamera() *Camera {
-	return &Camera{}
 }
 
 func (c *Camera) GetPosition() (float64, float64) {

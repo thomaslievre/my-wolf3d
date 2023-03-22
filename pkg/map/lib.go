@@ -1,4 +1,4 @@
-package raycaster
+package worldmap
 
 const (
 	mapWidth  = 24
@@ -32,21 +32,21 @@ var worldMap = [mapWidth][mapHeight]int{
 	{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 }
 
-type Map struct {
+type WorldMap struct {
 	world [mapWidth][mapHeight]int
 }
 
-func NewMap() *Map {
-	newMap := &Map{}
-	newMap.InitMap()
+func NewWorldMap() *WorldMap {
+	newMap := &WorldMap{}
+	newMap.InitWorldMap()
 	return newMap
 }
 
-func (m *Map) InitMap() {
+func (m *WorldMap) InitWorldMap() {
 	m.world = worldMap
 }
 
-func (m *Map) HasHitWall(x int, y int) bool {
+func (m *WorldMap) HasHitWall(x float64, y float64) bool {
 	if x < 0 || y < 0 {
 		// todo: throw error
 		return true
