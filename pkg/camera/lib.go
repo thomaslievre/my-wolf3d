@@ -5,9 +5,14 @@ type Camera struct {
 	dirX, dirY     float64
 	planeX, planeY float64
 
+	sizeH float64
+
 	fov     float64
 	halfFov float64
 	angle   float64
+
+	projectionPlaneWidth  float64
+	projectionPlaneHeight float64
 }
 
 func NewCamera() *Camera {
@@ -15,7 +20,12 @@ func NewCamera() *Camera {
 		fov:     60,
 		halfFov: 30,
 		angle:   90,
+		sizeH:   1,
 	}
+}
+
+func (c *Camera) SizeH() float64 {
+	return c.sizeH
 }
 
 func (c *Camera) Fov() float64 {

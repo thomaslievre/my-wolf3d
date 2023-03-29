@@ -47,7 +47,7 @@ func (m *WorldMap) InitWorldMap() {
 }
 
 func (m *WorldMap) HasHitWall(x float64, y float64) bool {
-	if x < 0 || y < 0 {
+	if x < 0 || y < 0 || x >= mapHeight || y >= mapWidth {
 		// todo: throw error
 		return true
 	}
